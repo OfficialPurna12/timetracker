@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="timer-container">
+    <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 2rem;">Study Timer</h1>
+    
+    <!-- Subject Selection -->
+    <div class="form-group" style="max-width: 300px; margin: 0 auto 2rem auto;">
+        <label class="form-label">Select Subject</label>
+        <select id="subjectSelect" class="form-select">
+            <option value="">Choose a subject...</option>
+            {% for subject in subjects %}
+            <option value="{{ subject._id }}">{{ subject.icon }} {{ subject.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    
+    <!-- Timer Presets -->
+    <div class="timer-presets">
+        <button class="preset-btn active" data-minutes="25">25 min</button>
+        <button class="preset-btn" data-minutes="45">45 min</button>
+        <button class="preset-btn" data-minutes="60">60 min</button>
+    </div>
+    
+    <!-- Custom Time Input -->
+    <div class="form-group" style="max-width: 200px; margin: 0 auto 2rem auto;">
+        <label class="form-label">Or set custom time (minutes)</label>
+        <input type="number" id="customTime" class="form-input" min="1" max="180" placeholder="e.g., 30">
+    </div>
+    
+    <!-- Timer Display -->
+    <div class="timer-display" id="timerDisplay">25:00</div>
+    
+    <!-- Timer Controls -->
+    <div class="timer-controls">
+        <button id="startBtn" class="btn btn-primary" style="padding: 1rem 2rem;">
+            ▶ Start
+        </button>
+        <button id="pauseBtn" class="btn btn-secondary" style="padding: 1rem 2rem; display: none;">
+            ⏸ Pause
+        </button>
+        <button id="stopBtn" class="btn btn-secondary" style="padding: 1rem 2rem;">
+            ⏹ Stop
+        </button>
+    </div>
+    
+    <!-- Session Info -->
+    <div style="margin-top: 3rem; color: var(--text-secondary); text-align: center;">
+        <p>Focus on your subject. Take breaks between sessions. You've got this! 💪</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/timer.js') }}"></script>
+{% endblock %}

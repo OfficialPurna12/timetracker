@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">
+        Welcome back, {{ session.user_name }}!
+    </h1>
+    <p style="color: var(--text-secondary);">Ready for your next study session?</p>
+</div>
+
+<!-- Stats Overview -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-number">{{ "%.1f"|format(total_today_minutes / 60) }}h</div>
+        <div class="stat-label">Studied Today</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-number">{{ subjects|length }}</div>
+        <div class="stat-label">Active Subjects</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-number">{{ (weekly_sessions|sum(attribute='duration_minutes') / 60)|round(1) }}h</div>
+        <div class="stat-label">This Week</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-number">
+            {% set total_goal = subjects|sum(attribute='weekly_goal_hours') %}
+            {% set daily_goal = total_goal / 7 if total_goal > 0 else 1 %}
+            {{ "%.0f"|format((total_today_minutes / 60) / daily_goal * 100) }}%
+        </div>
+        <div class="stat-label">Daily Goal Progress</div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h2 class="card-title">Quick Actions</h2>
+    </div>
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <a href="{{ url_for('main.timer') }}" class="btn btn-primary">
+            ⏱️ Start Timer
+        </a>
+        <a href="{{ url_for('main.subjects') }}" class="btn btn-secondary">
+            📚 Manage Subjects
+        </a>
+        <a href="{{ url_for('main.progress') }}" class="btn btn-secondary">
+            📊 View Progress
+        </a>
+    </div>
+</div>
+
+<!-- Your Subjects -->
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">Your Subjects</h2>
+        <a href="{{ url_for('main.subjects') }}" class="btn btn-secondary">Add Subject</a>
+    </div>
+    
+    <div class="grid grid-3">
+        {% for subject in subjects %}
+        <div class="subject-card">
+            <div class="subject-header">
+                <div class="subject-icon" style="background: {{ subject.color }}20; color: {{ subject.color }};">
+                    {{ subject.icon }}
+                </div>
+                <div>
+                    <div class="subject-name">{{ subject.name }}</div>
+                    <div class="subject-goal">Goal: {{ subject.weekly_goal_hours }}h/week</div>
+                </div>
+            </div>
+            
+            {% set subject_id = subject._id|string %}
+            {% set default_progress = {'today_minutes': 0, 'daily_goal_minutes': 60} %}
+            {% set progress = subject_progress.get(subject_id, default_progress) if subject_progress else default_progress %}
+            {% set today_minutes = progress.today_minutes|default(0) %}
+            {% set daily_goal_minutes = progress.daily_goal_minutes|default(60) %}
+            {% set today_percentage = (today_minutes / daily_goal_minutes * 100)|round(1) if daily_goal_minutes > 0 else 0 %}
+            
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ [today_percentage, 100]|min }}%; background: {{ subject.color }};"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.875rem;">
+                <span style="color: var(--text-secondary);">
+                    {{ "%.1f"|format(today_minutes / 60) }}h today
+                </span>
+                <span style="color: var(--text-secondary);">
+                    {{ today_percentage }}%
+                </span>
+            </div>
+        </div>
+        {% endfor %}
+        
+        <!-- Add Subject Card -->
+        <a href="{{ url_for('main.subjects') }}" class="subject-card add-subject-card">
+            <div class="add-subject-content">
+                <div class="add-icon">+</div>
+                <div>Add New Subject</div>
+            </div>
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">Settings</h1>
+    <p style="color: var(--text-secondary);">Manage your account preferences</p>
+</div>
+
+<div class="grid grid-2">
+    <!-- Account Settings -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Account Settings</h2>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-input" value="{{ session.user_email if session.user_email else 'user@example.com' }}" readonly>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">Display Name</label>
+            <input type="text" class="form-input" value="{{ session.user_name }}" readonly>
+        </div>
+        
+        <button class="btn btn-secondary" style="width: 100%;" disabled>
+            Edit Profile (Coming Soon)
+        </button>
+    </div>
+
+    <!-- Preferences -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Study Preferences</h2>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">Default Timer Duration (minutes)</label>
+            <select class="form-select" disabled>
+                <option>25 minutes</option>
+                <option>45 minutes</option>
+                <option>60 minutes</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">Daily Study Goal (hours)</label>
+            <input type="number" class="form-input" value="2" min="1" max="12" disabled>
+        </div>
+        
+        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+            <input type="checkbox" id="notifications" disabled>
+            <label for="notifications" style="color: var(--text-secondary);">
+                Enable study reminder notifications
+            </label>
+        </div>
+        
+        <button class="btn btn-secondary" style="width: 100%; margin-top: 1rem;" disabled>
+            Save Preferences (Coming Soon)
+        </button>
+    </div>
+</div>
+
+<!-- Data Management -->
+<div class="card mt-4">
+    <div class="card-header">
+        <h2 class="card-title">Data Management</h2>
+    </div>
+    
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <button class="btn btn-secondary" disabled>
+            📥 Export Study Data
+        </button>
+        <button class="btn btn-secondary" disabled>
+            🗑️ Clear All Data
+        </button>
+        <a href="{{ url_for('auth.logout') }}" class="btn btn-secondary">
+            🚪 Logout
+        </a>
+    </div>
+    
+    <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+        <h3 style="margin-bottom: 1rem; color: var(--error);">Danger Zone</h3>
+        <button class="btn" style="background: var(--error); color: white;" disabled>
+            Delete Account
+        </button>
+        <p style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.5rem;">
+            This will permanently delete your account and all study data. This action cannot be undone.
+        </p>
+    </div>
+</div>
+
+<!-- App Info -->
+<div class="card mt-4">
+    <div class="card-header">
+        <h2 class="card-title">About StudyMate</h2>
+    </div>
+    
+    <div style="color: var(--text-secondary);">
+        <p><strong>Version:</strong> 1.0.0</p>
+        <p><strong>Last Updated:</strong> {{ now.strftime('%B %d, %Y') }}</p>
+        <p>StudyMate helps students track their study time, build consistent routines, and achieve academic goals through data-driven insights.</p>
+    </div>
+</div>
+{% endblock %}

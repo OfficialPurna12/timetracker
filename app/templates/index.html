@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero-section text-center" style="padding: 4rem 0;">
+    <div class="container">
+        <h1 style="font-size: 3rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-primary);">
+            Study Smarter, Not Harder
+        </h1>
+        <p style="font-size: 1.25rem; color: var(--text-secondary); margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+            Track your study time, build consistent routines, and achieve your academic goals with StudyMate.
+        </p>
+        
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="{{ url_for('auth.register') }}" class="btn btn-primary" style="font-size: 1.125rem; padding: 1rem 2rem;">
+                Get Started Free
+            </a>
+            <a href="{{ url_for('auth.login') }}" class="btn btn-secondary" style="font-size: 1.125rem; padding: 1rem 2rem;">
+                Sign In
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="features-section" style="padding: 4rem 0; background: white;">
+    <div class="container">
+        <h2 class="text-center" style="margin-bottom: 3rem; font-size: 2.5rem;">Everything You Need to Succeed</h2>
+        
+        <div class="grid grid-3">
+            <div class="card text-center">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">📚</div>
+                <h3 style="margin-bottom: 1rem;">Organize Subjects</h3>
+                <p style="color: var(--text-secondary);">Easily add all your subjects, set goals, and track everything in one place.</p>
+            </div>
+            
+            <div class="card text-center">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">⏱️</div>
+                <h3 style="margin-bottom: 1rem;">Focus with Timer</h3>
+                <p style="color: var(--text-secondary);">Use our Pomodoro timer to track study sessions and build consistent routines.</p>
+            </div>
+            
+            <div class="card text-center">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
+                <h3 style="margin-bottom: 1rem;">Visualize Progress</h3>
+                <p style="color: var(--text-secondary);">See your daily and weekly progress with beautiful charts and stay motivated.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

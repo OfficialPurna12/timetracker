@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">Your Progress</h1>
+    <div style="display: flex; gap: 2rem; align-items: center;">
+        <div class="streak-display">
+            🔥 {{ streak }} day streak
+        </div>
+        <p style="color: var(--text-secondary); margin: 0;">
+            Keep up the great work!
+        </p>
+    </div>
+</div>
+
+<!-- Charts Grid -->
+<div class="grid grid-2">
+    <div class="chart-container">
+        <canvas id="subjectDistributionChart" 
+                data-chart="{{ chart_data|tojson|forceescape }}"
+                height="300"></canvas>
+    </div>
+    
+    <div class="chart-container">
+        <canvas id="weeklyProgressChart" height="300"></canvas>
+    </div>
+</div>
+
+<div class="chart-container">
+    <canvas id="dailyTrendChart" height="300"></canvas>
+</div>
+
+<!-- Recent Sessions -->
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">Recent Study Sessions</h2>
+    </div>
+    
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <th style="padding: 1rem; text-align: left;">Date</th>
+                    <th style="padding: 1rem; text-align: left;">Subject</th>
+                    <th style="padding: 1rem; text-align: right;">Duration</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for session in weekly_sessions[:10] %}
+                {% set subject = subjects|selectattr("_id", "equalto", session.subject_id)|first %}
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 1rem;">
+                        {{ session.start_time.strftime('%b %d, %Y %H:%M') }}
+                    </td>
+                    <td style="padding: 1rem;">
+                        {% if subject %}
+                        <span style="color: {{ subject.color }};">{{ subject.icon }}</span>
+                        {{ subject.name }}
+                        {% else %}
+                        Unknown Subject
+                        {% endif %}
+                    </td>
+                    <td style="padding: 1rem; text-align: right;">
+                        {{ session.duration_minutes }} min
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3" style="padding: 2rem; text-align: center; color: var(--text-secondary);">
+                        No study sessions recorded yet. Start your first timer!
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+{% endblock %}

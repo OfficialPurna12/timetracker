@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">Manage Subjects</h1>
+    <p style="color: var(--text-secondary);">Add and organize your study subjects</p>
+</div>
+
+<div class="grid grid-2">
+    <!-- Add Subject Form -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Add New Subject</h2>
+        </div>
+        
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            
+            <div class="form-group">
+                {{ form.name.label(class="form-label") }}
+                {{ form.name(class="form-input", placeholder="e.g., Mathematics, Physics") }}
+            </div>
+            
+            <div class="form-group">
+                {{ form.color.label(class="form-label") }}
+                {{ form.color(class="form-select") }}
+            </div>
+            
+            <div class="form-group">
+                {{ form.icon.label(class="form-label") }}
+                {{ form.icon(class="form-select") }}
+            </div>
+            
+            <div class="form-group">
+                {{ form.weekly_goal_hours.label(class="form-label") }}
+                {{ form.weekly_goal_hours(class="form-input", type="number", min="1", max="50") }}
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+                Add Subject
+            </button>
+        </form>
+    </div>
+
+    <!-- Current Subjects -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Your Subjects ({{ subjects|length }})</h2>
+        </div>
+        
+        <div style="max-height: 500px; overflow-y: auto;">
+            {% for subject in subjects %}
+            <div class="subject-card" style="margin-bottom: 1rem; position: relative;">
+                <div class="subject-header">
+                    <div class="subject-icon" style="background: {{ subject.color }}20; color: {{ subject.color }};">
+                        {{ subject.icon }}
+                    </div>
+                    <div style="flex-grow: 1;">
+                        <div class="subject-name">{{ subject.name }}</div>
+                        <div class="subject-goal">Weekly goal: {{ subject.weekly_goal_hours }} hours</div>
+                    </div>
+                </div>
+                
+                <button class="delete-subject btn btn-secondary" 
+                        style="position: absolute; top: 1rem; right: 1rem; padding: 0.5rem;"
+                        data-subject-id="{{ subject._id }}"
+                        data-subject-name="{{ subject.name }}">
+                    🗑️
+                </button>
+            </div>
+            {% else %}
+            <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">📚</div>
+                <p>No subjects added yet. Add your first subject to get started!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
